@@ -1,7 +1,7 @@
 module.exports = {
 
   // 网页标题
-  title: 'Vue Admin Template',
+  title: '葬爱家族人事管理系统',
 
   /**
    * @type {boolean} true | false

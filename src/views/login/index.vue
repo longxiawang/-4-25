@@ -1,30 +1,36 @@
 <template>
   <div class="login-container">
+    <!-- 登陆界面表单 -->
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
+      <!-- 登录界面标题 -->
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <!-- 账号密码输入框上面的图片 -->
+        <img src="@/assets/common/login-logo.png" alt="" style="margin-bottom:20px">
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="mobile">
+        <!-- 账号输入框的小icon图标 -->
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
+        <!-- 账号输入框 -->
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
+          ref="mobile"
+          v-model="loginForm.mobile"
+          placeholder="请输入账号"
           name="username"
           type="text"
           tabindex="1"
-          auto-complete="on"
+          auto-complete="off"
         />
       </el-form-item>
-
+      <!-- 密码框小图标 -->
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
+        <!-- 密码输入框 -->
         <el-input
           :key="passwordType"
           ref="password"
@@ -36,16 +42,17 @@
           auto-complete="on"
           @keyup.enter.native="handleLogin"
         />
+        <!-- 密码查看icon图标 -->
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <!-- 登录按钮 -->
+      <el-button class="LoginBtn" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+        <span style="margin-right:20px;">账号: 111111</span>
+        <span> 密码: 111111</span>
       </div>
 
     </el-form>
@@ -53,33 +60,34 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+// 导入验证手机号规则的工具函数
+import { validPhone } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
+    // 账号自定义校验规则
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
+      // 如果正则函数匹配成功则直接回调，不然执行回调且报错
+      validPhone(value) ? callback() : callback('账号或密码错误,请重试!')
     }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
+
     return {
       loginForm: {
-        username: 'admin',
+        mobile: 'admin',
         password: '111111'
       },
+
+      // 表单校验规则
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+
+        /* 账号校验规则 */
+        mobile: [
+          { required: true, trigger: 'blur', message: '账号不能为空！' }, { validator: validateUsername, trigger: 'blur' }
+        ],
+
+        /* 密码校验规则 */
+        password: [{ required: true, trigger: 'blur', message: '密码不能为空！' }, { trigger: 'blur', min: 6, max: 16, message: '长度在 6 到 16 个字符' }]
       },
       loading: false,
       passwordType: 'password',
@@ -141,6 +149,8 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
+  background-image: url('../../assets/common/1.jpg');
+  background-position: center;
   .el-input {
     display: inline-block;
     height: 47px;
@@ -152,7 +162,7 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: rgb(6, 7, 7);
       height: 47px;
       caret-color: $cursor;
 
@@ -165,7 +175,7 @@ $cursor: #fff;
 
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(255,255,255,0.7);
     border-radius: 5px;
     color: #454545;
   }
@@ -175,7 +185,7 @@ $cursor: #fff;
 <style lang="scss" scoped>
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
-$light_gray:#eee;
+$light_gray:#68b0fe;  // 输入框改成蓝色
 
 .login-container {
   min-height: 100%;
@@ -232,6 +242,11 @@ $light_gray:#eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+  .LoginBtn {
+    // background-color: rgb(252, 192, 255);
+    height: 64px;
+
   }
 }
 </style>

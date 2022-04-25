@@ -1,18 +1,20 @@
 'use strict'
 const path = require('path')
+// 引入了 网站标题，左侧logo，顶部固定的配置文件
 const defaultSettings = require('./src/settings.js')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
-
-const name = defaultSettings.title || 'vue Admin Template' // page title
+// 如果配置文件配置了网站标题，则用配置文件的，如果配置无效则用后面这个
+const name = defaultSettings.title || 'vue Admin Template'
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
 // For example, Mac: sudo npm run
 // You can change the port by the following methods:
 // port = 9528 npm run dev OR npm run dev --port = 9528
+// 配置端口号
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
@@ -30,7 +32,7 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
-    port: port,
+    port: port, // 端口号是多少呢？18行代码的结果就是端口号的值
     open: true,
     overlay: {
       warnings: false,
